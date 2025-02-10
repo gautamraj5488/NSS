@@ -6,10 +6,18 @@ import { Navigate, useNavigate } from "react-router-dom";
 const TestForm = () => {
   const [testTitle, setTestTitle] = useState("");
   const [numSubjects, setNumSubjects] = useState(1);
-  const [subjects, setSubjects] = useState([{ name: "", questions: [] }]);
+  const [subjects, setSubjects] = useState([{
+    name: "Subject 1",
+    questions: [],
+    currentQuestion: "",
+    currentOptions: ["", "", "", ""],
+    correctAnswer: "",
+    currentImage: null,
+    currentNegativeMark: 1
+  }]);
   const [duration, setDuration] = useState("");
   const [markingScheme, setMarkingScheme] = useState("");
-  const [step, setStep] = useState(1); // Control the step (Step 1 or Step 2)
+  const [step, setStep] = useState(1);
   const [currentSubjectIndex, setCurrentSubjectIndex] = useState(0);
   const [startTime, setStartTime] = useState(0);
   const [timeInputValue, setTimeInputValue] = useState("");
@@ -17,9 +25,9 @@ const TestForm = () => {
   const [examDate, setExamDate] = useState("");
   const [questionType, setQuestionType] = useState("options");
   const [integerRange, setIntegerRange] = useState({ min: "", max: "" });
-  const navigate = useNavigate(); // To navigate to result screen
+  const navigate = useNavigate();
 
-  // Save state to localStorage whenever it changes
+  // Save state to localStorage
   useEffect(() => {
     const formState = {
       testTitle,
@@ -36,54 +44,40 @@ const TestForm = () => {
       integerRange,
     };
     localStorage.setItem("testFormState", JSON.stringify(formState));
-  }, [
-    testTitle,
-    numSubjects,
-    subjects,
-    duration,
-    markingScheme,
-    step,
-    currentSubjectIndex,
-    startTime,
-    timeInputValue,
-    examDate,
-    questionType,
-    integerRange,
-  ]);
+  }, [testTitle, numSubjects, subjects, duration, markingScheme, step, 
+      currentSubjectIndex, startTime, timeInputValue, examDate, questionType, integerRange]);
 
-  // // Retrieve state from localStorage on component mount
-  // useEffect(() => {
-  //   const savedState = localStorage.getItem("testFormState");
-  //   if (savedState) {
-  //     const {
-  //       testTitle,
-  //       numSubjects,
-  //       subjects,
-  //       duration,
-  //       markingScheme,
-  //       step,
-  //       currentSubjectIndex,
-  //       startTime,
-  //       timeInputValue,
-  //       examDate,
-  //       questionType,
-  //       integerRange,
-  //     } = JSON.parse(savedState);
+  // Load state from localStorage
+  useEffect(() => {
+    const savedState = localStorage.getItem("testFormState");
+    if (savedState) {
+      const parsedState = JSON.parse(savedState);
+      
+      // Ensure all subject fields are properly initialized
+      const initializedSubjects = parsedState.subjects.map(subject => ({
+        name: subject.name || `Subject ${Math.random().toString(36).substr(2, 9)}`,
+        questions: subject.questions || [],
+        currentQuestion: subject.currentQuestion || "",
+        currentOptions: subject.currentOptions || ["", "", "", ""],
+        correctAnswer: subject.correctAnswer || "",
+        currentImage: subject.currentImage || null,
+        currentNegativeMark: subject.currentNegativeMark || 1
+      }));
 
-  //     setTestTitle(testTitle || "");
-  //     setNumSubjects(numSubjects || 1);
-  //     setSubjects(subjects || [{ name: "", questions: [] }]);
-  //     setDuration(duration || "");
-  //     setMarkingScheme(markingScheme || "");
-  //     setStep(step || 1);
-  //     setCurrentSubjectIndex(currentSubjectIndex || 0);
-  //     setStartTime(startTime || 0);
-  //     setTimeInputValue(timeInputValue || "");
-  //     setExamDate(examDate || "");
-  //     setQuestionType(questionType || "options");
-  //     setIntegerRange(integerRange || { min: "", max: "" });
-  //   }
-  // }, []);
+      setSubjects(initializedSubjects);
+      setTestTitle(parsedState.testTitle || "");
+      setNumSubjects(parsedState.numSubjects || 1);
+      setDuration(parsedState.duration || "");
+      setMarkingScheme(parsedState.markingScheme || "");
+      setStep(parsedState.step || 1);
+      setCurrentSubjectIndex(parsedState.currentSubjectIndex || 0);
+      setStartTime(parsedState.startTime || 0);
+      setTimeInputValue(parsedState.timeInputValue || "");
+      setExamDate(parsedState.examDate || "");
+      setQuestionType(parsedState.questionType || "options");
+      setIntegerRange(parsedState.integerRange || { min: "", max: "" });
+    }
+  }, []);
 
   const handleImageUpload = async (e, subjectIndex) => {
     const file = e.target.files[0];
@@ -94,11 +88,7 @@ const TestForm = () => {
 
     try {
       setUploadingImage(true);
-      const response = await Axios.post('http://localhost:8000/upload-image', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data'
-        }
-      });
+      const response = await Axios.post('http://localhost:8000/upload-image', formData);
       
       setSubjects(prevSubjects => 
         prevSubjects.map((subject, i) => 
@@ -112,16 +102,30 @@ const TestForm = () => {
     }
   };
 
+
+ 
   const handleTimeChange = (e) => {
     const timeString = e.target.value;
     setTimeInputValue(timeString);
-    
-    // Convert HH:MM to decimal hours
     const [hours, minutes] = timeString.split(':').map(Number);
-    const decimalTime = hours + (minutes / 60);
-    setStartTime(decimalTime);
+    setStartTime(hours + (minutes / 60));
   };
 
+  const handleNumSubjectsChange = (e) => {
+    const value = Math.max(1, parseInt(e.target.value) || 1);
+    setNumSubjects(value);
+    
+    const newSubjects = Array.from({ length: value }, (_, index) => ({
+      name: `Subject ${index + 1}`,
+      questions: [],
+      currentQuestion: "",
+      currentOptions: ["", "", "", ""],
+      correctAnswer: "",
+      currentImage: null,
+      currentNegativeMark: 1
+    }));
+    setSubjects(newSubjects);
+  };
   const handleNextStep = () => {
     if (step === 1) {
       setStep(2);
@@ -132,22 +136,8 @@ const TestForm = () => {
     setTestTitle(e.target.value);
   };
 
-  const handleNumSubjectsChange = (e) => {
-    const value = e.target.value;
-    // Ensure the value is a valid number and greater than or equal to 1
-    if (!isNaN(value) && value >= 1) {
-      setNumSubjects(Number(value));
-      const newSubjects = Array.from({ length: Number(value) }, (_, index) => ({
-        name: `Subject ${index + 1}`,
-        questions: [],
-      }));
-      setSubjects(newSubjects);
-    } else {
-      // If the input is invalid, reset to the default value (1)
-      setNumSubjects(1);
-    }
-  };
-
+ 
+  
   const handleSubjectNameChange = (index, e) => {
     setSubjects(prevSubjects => 
       prevSubjects.map((subject, i) => 
@@ -159,20 +149,19 @@ const TestForm = () => {
   const handleAddQuestion = () => {
     setSubjects(prevSubjects => {
       const currentSubject = prevSubjects[currentSubjectIndex];
+      if (!currentSubject.currentQuestion.trim()) return prevSubjects;
+
       const newQuestion = {
         questionType,
-        question: currentSubject.currentQuestion || "",
-        options: (questionType === "options" || questionType === "moptions") 
-          ? currentSubject.currentOptions 
-          : [],
-        correctAnswer: currentSubject.correctAnswer || "",
-        image: currentSubject.currentImage || null,
-        negativeMark: currentSubject.currentNegativeMark || 1,
+        question: currentSubject.currentQuestion,
+        options: questionType === "integer" ? [] : currentSubject.currentOptions,
+        correctAnswer: currentSubject.correctAnswer,
+        image: currentSubject.currentImage,
+        negativeMark: currentSubject.currentNegativeMark,
         ...(questionType === "integer" && { integerRange })
       };
 
-      // Clear current fields by creating new subject with default values
-      const updatedSubjects = prevSubjects.map((subject, i) => 
+      return prevSubjects.map((subject, i) => 
         i === currentSubjectIndex ? {
           ...subject,
           questions: [...subject.questions, newQuestion],
@@ -180,44 +169,37 @@ const TestForm = () => {
           currentOptions: ["", "", "", ""],
           correctAnswer: "",
           currentImage: null,
-          currentNegativeMark: 1,
+          currentNegativeMark: 1
         } : subject
       );
-
-      return updatedSubjects;
     });
 
     setQuestionType("options");
     setIntegerRange({ min: "", max: "" });
   };
+ 
   const handleQuestionChange = (e) => {
     const value = e.target.value;
-    setSubjects(prevSubjects => 
-      prevSubjects.map((subject, i) => 
-        i === currentSubjectIndex ? { ...subject, currentQuestion: value } : subject
-      )
-    );
+    setSubjects(prev => prev.map((subject, i) => 
+      i === currentSubjectIndex ? { ...subject, currentQuestion: value } : subject
+    ));
   };
   const handleOptionChange = (optionIndex, e) => {
     const value = e.target.value;
-    setSubjects(prevSubjects => 
-      prevSubjects.map((subject, i) => {
-        if (i === currentSubjectIndex) {
-          const newOptions = [...(subject.currentOptions || ["", "", "", ""])];
-          newOptions[optionIndex] = value;
-          return { ...subject, currentOptions: newOptions };
-        }
-        return subject;
-      })
-    );
+    setSubjects(prev => prev.map((subject, i) => {
+      if (i === currentSubjectIndex) {
+        const newOptions = [...subject.currentOptions];
+        newOptions[optionIndex] = value;
+        return { ...subject, currentOptions: newOptions };
+      }
+      return subject;
+    }));
   };
   const handleCorrectAnswerChange = (e) => {
     const value = e.target.value;
-    setSubjects(prevSubjects => 
-      prevSubjects.map((subject, i) => 
-        i === currentSubjectIndex ? { ...subject, correctAnswer: value } : subject
-      )
-    );
+    setSubjects(prev => prev.map((subject, i) => 
+      i === currentSubjectIndex ? { ...subject, correctAnswer: value } : subject
+    ));
   };
 
   const handleNegativeMarkChange = (e) => {
@@ -239,7 +221,11 @@ const TestForm = () => {
     );
   };
   const handleSubjectSelect = (e) => {
-    setCurrentSubjectIndex(e.target.value);
+    const newIndex = parseInt(e.target.value);
+    setCurrentSubjectIndex(newIndex);
+    // Reset question type when changing subjects
+    setQuestionType("options");
+    setIntegerRange({ min: "", max: "" });
   };
 
   const handleUploadData = async () => {
@@ -392,24 +378,28 @@ const TestForm = () => {
         <div className="form-section-grid">
           <div className="form-group">
             <label>Select Subject</label>
-            <select value={currentSubjectIndex} onChange={handleSubjectSelect}>
-              {subjects.map((subject, index) => (
-                <option key={index} value={index}>
-                  {subject.name}
-                </option>
-              ))}
+            <select 
+                value={currentSubjectIndex} 
+                onChange={handleSubjectSelect}
+              >
+               {subjects.map((subject, index) => (
+                  <option key={index} value={index}>
+                    {subject.name}
+                  </option>
+                ))}
             </select>
           </div>
 
           <div className="form-group">
-            <label>Question</label>
-            <input
-            type="text"
-            value={subjects[currentSubjectIndex]?.currentQuestion || ""}
-            onChange={handleQuestionChange}
-            placeholder="Enter question"
-          />
-          </div>
+              <label>Question</label>
+              <input
+                type="text"
+                value={subjects[currentSubjectIndex]?.currentQuestion || ""}
+                onChange={handleQuestionChange}
+                placeholder="Enter question"
+                key={`question-${currentSubjectIndex}`} // Force re-render
+              />
+            </div>
         </div>
 
         <div className="form-section-grid">
@@ -475,77 +465,35 @@ const TestForm = () => {
         </div>
 
         {questionType === "options" || questionType === "moptions" ? (
-          <div className="options-grid">
-            {[0, 1, 2, 3].map((optionIndex) => (
-              <div className="form-group" key={optionIndex}>
-                <label>Option {optionIndex + 1}</label>
-                <input
-                  type="text"
-                  value={subjects[currentSubjectIndex]?.currentOptions?.[optionIndex] || ""}
-                  onChange={(e) => handleOptionChange(optionIndex, e)}
-                />
+              <div className="options-grid">
+                {[0, 1, 2, 3].map((optionIndex) => (
+                  <div className="form-group" key={optionIndex}>
+                    <label>Option {optionIndex + 1}</label>
+                    <input
+                      type="text"
+                      value={subjects[currentSubjectIndex]?.currentOptions?.[optionIndex] || ""}
+                      onChange={(e) => handleOptionChange(optionIndex, e)}
+                      key={`option-${currentSubjectIndex}-${optionIndex}`}
+                    />
+                  </div>
+                ))}
               </div>
-            ))}
-          </div>
-        ) : (
-          <div className="integer-range-grid">
-            {/* <div className="form-group">
-              <label>Minimum Value</label>
-              <input
-                type="number"
-                value={integerRange.min}
-                onChange={(e) => setIntegerRange(prev => ({...prev, min: e.target.value}))}
-              />
-            </div>
-            <div className="form-group">
-              <label>Maximum Value</label>
-              <input
-                type="number"
-                value={integerRange.max}
-                onChange={(e) => setIntegerRange(prev => ({...prev, max: e.target.value}))}
-              />
-            </div> */}
-          </div>
-        )}
+            ) : null}
 
-        <div className="form-group">
-          <label>Correct Answer</label>
-          {questionType === "options" ? (
-            <input
-            type={questionType === "integer" ? "number" : "text"}
-            value={subjects[currentSubjectIndex]?.correctAnswer || ""}
-            onChange={handleCorrectAnswerChange}
-              placeholder="Enter correct option (e.g., 1)"
-            />
-          ) :questionType === "moptions" ? (
-            <input
-              type="text"
-              value={subjects[currentSubjectIndex].correctAnswer || ""}
-              onChange={(e) =>
-                setSubjects((prevSubjects) => {
-                  const updated = [...prevSubjects];
-                  updated[currentSubjectIndex].correctAnswer = e.target.value;
-                  return updated;
-                })
-              }
-              placeholder="Selected options (e.g., 124)"
-            />
-          ) : (
-            <input
-              type="number"
-              value={subjects[currentSubjectIndex].correctAnswer || ""}
-              onChange={(e) =>
-                setSubjects((prevSubjects) => {
-                  const updated = [...prevSubjects];
-                  updated[currentSubjectIndex].correctAnswer = e.target.value;
-                  return updated;
-                })
-              }
-              placeholder="Enter correct value (e.g., 125.75)"
-             
-            />
-          )}
-        </div>
+                  <div className="form-group">
+                    <label>Correct Answer</label>
+                    <input
+                      type={questionType === "integer" ? "number" : "text"}
+                      value={subjects[currentSubjectIndex]?.correctAnswer || ""}
+                      onChange={handleCorrectAnswerChange}
+                      placeholder={
+                        questionType === "options" ? "Enter correct option (e.g., 1)" :
+                        questionType === "moptions" ? "Enter correct options (e.g., 124)" :
+                        "Enter correct value"
+                      }
+                      key={`answer-${currentSubjectIndex}`}
+                    />
+                  </div>
       </div>
     </div>
 
