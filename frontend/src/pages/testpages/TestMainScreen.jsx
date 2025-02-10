@@ -345,11 +345,7 @@ const TestScreen = () => {
           const correctAns = parseFloat(correctAnswer);
           let isCorrect = studentAns === correctAns;
 
-          if (question.integerRange) {
-            const min = parseFloat(question.integerRange.min);
-            const max = parseFloat(question.integerRange.max);
-            isCorrect = studentAns >= min && studentAns <= max;
-          }
+       
 
           if (isCorrect) {
             marks += test.mark_question; // Add marks for correct answer
