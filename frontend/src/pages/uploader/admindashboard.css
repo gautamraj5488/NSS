@@ -1,0 +1,235 @@
+.admin-dashboard {
+  padding: 2rem;
+  min-height: 100vh;
+  background: #f8f9ff;
+  font-family: 'Inter', sans-serif;
+  display: flex;
+  gap: 2rem;
+  margin-top: 60px; /* Space for fixed header */
+}
+
+h1 {
+  text-align: center;
+  color: #2c3e50;
+  margin-bottom: 2rem;
+  font-size: 2.5rem;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+}
+
+.sections-container {
+  display: flex;
+  width: 100%;
+  gap: 2rem;
+}
+
+.upcoming-section {
+  flex: 1;
+  background: white;
+  border-radius: 16px;
+  padding: 2rem;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.05);
+  border: 1px solid rgba(241, 243, 246, 0.8);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.past-section {
+  flex: 1;
+  background: white;
+  border-radius: 16px;
+  padding: 2rem;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.05);
+  border: 1px solid rgba(241, 243, 246, 0.8);
+}
+
+h2 {
+  color: #2c3e50;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid #f0f2f5;
+  font-size: 1.5rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+}
+
+h2::before {
+  content: '';
+  width: 8px;
+  height: 8px;
+  background: currentColor;
+  border-radius: 50%;
+}
+
+.test-list {
+  display: grid;
+  gap: 1.5rem;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  overflow-y: auto;
+  max-height: calc(100vh - 300px); /* Adjust based on your header height */
+}
+
+.test-card {
+  background: #fff;
+  border-radius: 12px;
+  padding: 1.5rem;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  border: 1px solid #ecedf2;
+  position: relative;
+  overflow: hidden;
+}
+
+.test-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 24px rgba(67, 97, 238, 0.1);
+  border-color: rgba(67, 97, 238, 0.2);
+}
+
+.test-card::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 4px;
+  background: linear-gradient(90deg, #4361ee 0%, #3f37c9 100%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.test-card:hover::after {
+  opacity: 1;
+}
+
+.test-content {
+  color: #444;
+  position: relative;
+  z-index: 1;
+}
+
+.test-time {
+  font-size: 0.9rem;
+  color: #64748b;
+  margin-bottom: 0.75rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.test-time::before {
+  content: '⏳';
+  font-size: 1.1rem;
+}
+
+.test-content h3 {
+  color: #2c3e50;
+  margin: 0 0 1rem 0;
+  font-size: 1.25rem;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+.test-content p {
+  color: #94a3b8;
+  font-size: 0.95rem;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.test-content p::before {
+  content: '⏱️';
+}
+
+.create-test-btn {
+  background: linear-gradient(135deg, #4361ee 0%, #3f37c9 100%);
+  color: white;
+  border: none;
+  padding: 1.25rem 2.5rem;
+  border-radius: 10px;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-top: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  box-shadow: 0 4px 6px rgba(67, 97, 238, 0.1);
+  width: 100%;
+}
+
+.create-test-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 15px rgba(67, 97, 238, 0.2);
+}
+
+.create-test-btn::before {
+  content: '+';
+  font-size: 1.4rem;
+  font-weight: 500;
+}
+
+.no-tests {
+  color: #94a3b8;
+  text-align: center;
+  padding: 2rem;
+  font-size: 1.1rem;
+  border: 2px dashed #e2e8f0;
+  border-radius: 12px;
+  margin-top: 1rem;
+}
+
+/* Responsive Design */
+@media (max-width: 1200px) {
+  .sections-container {
+      flex-direction: column;
+      gap: 2rem;
+  }
+
+  .upcoming-section, .past-section {
+      flex: none;
+      width: 100%;
+  }
+}
+
+@media (max-width: 768px) {
+  .admin-dashboard {
+      padding: 1.5rem;
+      margin-top: 50px;
+  }
+
+  h1 {
+      font-size: 2rem;
+  }
+
+  .test-list {
+      grid-template-columns: 1fr;
+  }
+
+  .test-card {
+      padding: 1.25rem;
+  }
+
+  .create-test-btn {
+      padding: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .upcoming-section, .past-section {
+      padding: 1.25rem;
+  }
+
+  h2 {
+      font-size: 1.3rem;
+  }
+
+  .test-content h3 {
+      font-size: 1.15rem;
+  }
+}

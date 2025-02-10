@@ -1,0 +1,111 @@
+.container2{
+  padding: 2rem;
+  max-width: 1200px;
+  margin: 2rem auto; /* Adjusted to remove extra top space */
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+  
+  .test-meta {
+    background: #f8f9fa;
+    padding: 1.5rem;
+    border-radius: 10px;
+    margin-bottom: 2rem;
+    display: flex;
+    gap: 2rem;
+    flex-wrap: wrap;
+  }
+  
+  .subject-section {
+    margin-bottom: 3rem;
+  }
+ 
+  .question-card {
+    background: white;
+    border-radius: 10px;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  }
+  
+  .question-header {
+    display: flex;
+    align-items: baseline;
+    gap: 1rem;
+    margin-bottom: 1rem;
+  }
+  
+  .question-type {
+    color: #666;
+    font-size: 0.9rem;
+  }
+  
+  .question-text {
+    font-size: 1.1rem;
+    margin-bottom: 1rem;
+  }
+  
+  .question-image img {
+    max-width: 300px;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+  }
+  
+  .options-container h4 {
+    margin-bottom: 0.5rem;
+  }
+  
+  .options-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+  }
+  
+  .option {
+    padding: 1rem;
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+    background: #f8f9fa;
+  }
+  
+  .option.correct {
+    background: #d4edda;
+    border-color: #c3e6cb;
+    font-weight: 500;
+  }
+  
+  .integer-answer .answer-box {
+    padding: 1rem;
+    background: #d4edda;
+    border-radius: 8px;
+    font-size: 1.2rem;
+    font-weight: 500;
+    display: inline-flex;
+    align-items: center;
+    gap: 1rem;
+  }
+  
+  .range {
+    font-size: 0.9rem;
+    color: #666;
+  }
+
+  .edit-button {
+    background-color: #4CAF50; /* Green */
+    border: none;
+    color: white;
+    padding: 8px 16px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 14px;
+    margin-left: 10px;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: background-color 0.3s ease;
+  }
+  
+  .edit-button:hover {
+    background-color: #45a049; /* Darker green */
+  }

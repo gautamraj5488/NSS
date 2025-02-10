@@ -1,0 +1,56 @@
+.app {
+    font-family: Arial, sans-serif;
+    padding: 20px;
+  }
+  
+  .question-status {
+    display: flex;
+    gap: 15px;
+  }
+  
+  .status-item {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+  
+  .status-color {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+  }
+  
+  .timer {
+    font-size: 1.2em;
+    margin: 10px 0;
+  }
+  
+  .subject-switcher {
+    margin: 15px 0;
+  }
+  
+  .subject-button {
+    margin-right: 10px;
+    padding: 5px 10px;
+    cursor: pointer;
+  }
+  
+  .performance-graph {
+    margin: 15px 0;
+  }
+  
+  .bookmarks,
+  .upcoming-tests,
+  .admin-dashboard {
+    margin: 15px 0;
+  }
+  
+  ul {
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  li {
+    margin: 5px 0;
+  }
+  

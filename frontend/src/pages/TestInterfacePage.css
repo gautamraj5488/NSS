@@ -1,0 +1,31 @@
+.test-interface {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+  }
+  
+  .header {
+    background-color: #1e90ff;
+    color: white;
+    padding: 1rem;
+    text-align: center;
+  }
+  
+  main {
+    display: flex;
+    flex: 1;
+  }
+  
+  .left-panel,
+  .right-panel {
+    width: 20%;
+    padding: 1rem;
+    background-color: #f5f5f5;
+  }
+  
+  .main-panel {
+    flex: 1;
+    padding: 2rem;
+    background-color: #ffffff;
+  }
+  

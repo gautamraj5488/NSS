@@ -1,0 +1,129 @@
+/* Centering the result card */
+.result-screen {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  /* background: linear-gradient(135deg, #e3f2fd, #bbdefb); */
+  padding: 20px;
+}
+
+/* Card container */
+.result-card {
+  background: white;
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  max-width: 600px;
+  width: 100%;
+  text-align: center;
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+/* Title */
+h1 {
+  font-size: 2rem;
+  color: #333;
+  margin-bottom: 20px;
+}
+
+/* Table styling */
+.result-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 20px;
+}
+
+.result-table th,
+.result-table td {
+  padding: 12px;
+  border: 1px solid #ddd;
+  text-align: center;
+}
+
+.result-table th {
+  background: #2196f3;
+  color: white;
+  font-size: 1rem;
+}
+
+.result-table tr:nth-child(even) {
+  background: #f9f9f9;
+}
+
+.result-table tr:hover {
+  background: #e3f2fd;
+  transition: 0.3s;
+}
+
+/* Summary section */
+.result-summary {
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin: 15px 0;
+  color: #444;
+}
+
+/* Buttons */
+.result-actions {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 20px;
+}
+
+.result-actions button {
+  padding: 12px 20px;
+  font-size: 1rem;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.3s;
+  width: 40%;
+}
+
+.result-actions button:first-child {
+  background: #4caf50;
+  color: white;
+}
+
+.result-actions .review-btn {
+  background: #ff9800;
+  color: white;
+}
+
+.result-actions button:hover {
+  opacity: 0.8;
+  transform: scale(1.05);
+}
+
+/* Fade-in animation */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Mobile responsiveness */
+@media (max-width: 600px) {
+  .result-card {
+    padding: 20px;
+  }
+
+  h1 {
+    font-size: 1.8rem;
+  }
+
+  .result-actions {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .result-actions button {
+    width: 100%;
+  }
+}
