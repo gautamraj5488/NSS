@@ -18,7 +18,7 @@ A web-based platform that provides JEE and NEET aspirants with a seamless mock t
 
 ### **1. Clone the repository**  
 ```sh
-git clone <repo-url>
+git clone https://github.com/gautamraj5488/NSS
 cd mock-test-webapp
 ```
 
@@ -40,8 +40,8 @@ npm start
 ### **3. Configure Environment Variables**  
 Create a `.env` file in the `backend` folder and add:  
 ```
-MONGO_URI=<your-mongodb-url>
-JWT_SECRET=<your-secret-key>
+MONGO_URI=mongodb+srv://himanshupersonal61:hQztzuIcIF20lO7y@nss.n8shh.mongodb.net/
+JWT_SECRET=himanshugauravgautamriteshpushkar
 PORT=5000
 ```
 
@@ -65,7 +65,3 @@ npm start
 
 ## **License**  
 This project is licensed under the MIT License.  
-
----
-
-Let me know if you need any modifications! 🚀
